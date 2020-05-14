@@ -14,6 +14,123 @@ const render = require("./lib/htmlRenderer");
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
 
+
+async function askManager() {
+    return await inquirer
+        .prompt([{
+                type: "input",
+                name: "name",
+                message: "What is your manager's name?",
+            },
+            {
+                type: "input",
+                name: "id",
+                message: "What is your manager's id?",
+            },
+            {
+                type: "input",
+                name: "email",
+                message: "What is your manager's email?",
+            },
+            {
+                type: "input",
+                name: "officeNumber",
+                message: "What is your manager's office number?",
+            }
+        ]);
+}
+
+async function askEngineer() {
+    return await inquirer
+        .prompt([{
+                type: "input",
+                name: "name",
+                message: "What is your engineer's name?",
+            },
+            {
+                type: "input",
+                name: "id",
+                message: "What is your engineer's id?",
+            },
+            {
+                type: "input",
+                name: "email",
+                message: "What is your engineer's email?",
+            },
+            {
+                type: "input",
+                name: "school",
+                message: "What is your engineer's Github username?",
+            }
+        ]);
+}
+
+async function askIntern() {
+    return await inquirer
+        .prompt([{
+                type: "input",
+                name: "name",
+                message: "What is your intern's name?",
+            },
+            {
+                type: "input",
+                name: "id",
+                message: "What is your intern's id?",
+            },
+            {
+                type: "input",
+                name: "email",
+                message: "What is your intern's email?",
+            },
+            {
+                type: "input",
+                name: "school",
+                message: "What is your intern's school?",
+            }
+        ])
+}
+
+async function addEmployee() {
+    return await inquirer
+        .prompt([{
+            type: "list",
+            name: "role",
+            message: "Which type of employee would you like to add?",
+            choices: [{
+                    name: "Engineer",
+                    value: "eng"
+                },
+                {
+                    name: "Intern",
+                    value: "int"
+                },
+                {
+                    name: "I don't want to add any team member!",
+                    value: "none"
+                }
+            ]
+        }]);
+}
+
+async function init() {
+    await askManager();
+
+    let employeeRole = await addEmployee();
+
+    while (employeeRole.role !== "none") {
+        
+        if (employeeRole.role === "eng") {
+            await askEngineer();
+        } else {
+            await askIntern();
+        }
+
+        employeeRole = await addEmployee();
+    }
+    //await writeToFile("team.html", userInput);
+}
+
+init();
 // After the user has input all employees desired, call the `render` function (required
 // above) and pass in an array containing all employee objects; the `render` function will
 // generate and return a block of HTML including templated divs for each employee!
