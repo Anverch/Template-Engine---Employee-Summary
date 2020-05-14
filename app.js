@@ -57,7 +57,7 @@ async function askEngineer() {
             },
             {
                 type: "input",
-                name: "school",
+                name: "github",
                 message: "What is your engineer's Github username?",
             }
         ]);
@@ -112,7 +112,7 @@ async function addEmployee() {
 
 async function init() {
     const employees = [];
-    
+
     const managerRes = await askManager();
     const manager = new Manager(managerRes.name, managerRes.id, managerRes.email, managerRes.officeNumber);
     employees.push(manager);
@@ -122,14 +122,18 @@ async function init() {
     while (employeeRole.role !== "none") {
         
         if (employeeRole.role === "eng") {
-            await askEngineer();
+            const engineerRes = await askEngineer();
+            const engineer = new Engineer(engineerRes.name, engineerRes.id, engineerRes.email, engineerRes.github);
+            employees.push(engineer);
         } else {
-            await askIntern();
+            const internRes = await askIntern();
+            const intern = new Intern(internRes.name, internRes.id, internRes.email, internRes.school);
+            employees.push(intern);
         }
         
         employeeRole = await addEmployee();
     }
-    const managerHTML = render(employees);
+    const outputHTML = render(employees);
 }
 
 init();
