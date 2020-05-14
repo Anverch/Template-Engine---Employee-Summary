@@ -13,8 +13,6 @@ const render = require("./lib/htmlRenderer");
 
 // Write code to use inquirer to gather information about the development team members,
 // and to create objects for each team member (using the correct classes as blueprints!)
-
-
 async function askManager() {
     return await inquirer
         .prompt([{
@@ -113,10 +111,14 @@ async function addEmployee() {
 }
 
 async function init() {
-    await askManager();
+    const employees = [];
+    
+    const managerRes = await askManager();
+    const manager = new Manager(managerRes.name, managerRes.id, managerRes.email, managerRes.officeNumber);
+    employees.push(manager);
 
     let employeeRole = await addEmployee();
-
+    
     while (employeeRole.role !== "none") {
         
         if (employeeRole.role === "eng") {
@@ -124,10 +126,10 @@ async function init() {
         } else {
             await askIntern();
         }
-
+        
         employeeRole = await addEmployee();
     }
-    //await writeToFile("team.html", userInput);
+    const managerHTML = render(employees);
 }
 
 init();
